@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import AuthorService from '@/services/AuthorService.js'
-import LogService from '@/services/LogService.js'
-import NavBar from '@/components/NavBarAdmin.vue'
+import AuthorService from "@/services/AuthorService.js";
+import LogService from "@/services/LogService.js";
+import NavBar from "@/components/NavBarAdmin.vue";
 export default {
   components: {
     NavBar,
@@ -46,25 +46,25 @@ export default {
       password: null,
       source_options: [],
       destination_options: [],
-    }
+    };
   },
   methods: {
     async saveForm() {
-      var param = {}
-      param.source = this.source
-      param.destination = this.destination
-      this.destination = ''
-      this.source = ''
-      await AuthorService.copyBook(param)
+      var param = {};
+      param.source = this.source;
+      param.destination = this.destination;
+      this.destination = "";
+      this.source = "";
+      await AuthorService.copyBook(param);
     },
   },
   async created() {
-    var response = await AuthorService.getCurrentBooks()
-    this.source_options = JSON.parse(response.data)
-    LogService.consoleLogMessage(this.source_options)
-    response = await AuthorService.getCurrentLanguages()
-    this.destination_options = JSON.parse(response.data)
-    LogService.consoleLogMessage(this.destination_options)
+    var response = await AuthorService.getCurrentBooks();
+    this.source_options = JSON.parse(response.data);
+    LogService.consoleLogMessage(this.source_options);
+    response = await AuthorService.getCurrentLanguages();
+    this.destination_options = JSON.parse(response.data);
+    LogService.consoleLogMessage(this.destination_options);
   },
-}
+};
 </script>

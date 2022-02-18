@@ -113,27 +113,27 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AuthorService from '@/services/AuthorService.js'
-import LogService from '@/services/LogService.js'
-import NavBar from '@/components/NavBarAdmin.vue'
-import vSelect from 'vue-select'
-import Users from '@/views/Users.vue'
-import { required } from 'vuelidate/lib/validators'
-import { authorizeMixin } from '@/mixins/AuthorizeMixin.js'
-import { countriesMixin } from '@/mixins/CountriesMixin.js'
-import store from '@/store/store.js'
+import { mapState } from "vuex";
+import AuthorService from "@/services/AuthorService.js";
+import LogService from "@/services/LogService.js";
+import NavBar from "@/components/NavBarAdmin.vue";
+import vSelect from "vue-select";
+import Users from "@/views/Users.vue";
+import { required } from "vuelidate/lib/validators";
+import { authorizeMixin } from "@/mixins/AuthorizeMixin.js";
+import { countriesMixin } from "@/mixins/CountriesMixin.js";
+import store from "@/store/store.js";
 
 export default {
   components: {
     NavBar,
     Users,
-    'v-select': vSelect,
+    "v-select": vSelect,
   },
   mixins: [authorizeMixin, countriesMixin],
   data() {
     return {
-      default_start_page: '/preview/languages/M2',
+      default_start_page: "/preview/languages/M2",
       firstname: null,
       lastname: null,
       scope: null,
@@ -146,9 +146,9 @@ export default {
       registered: true,
       scope_options: [],
       language_options: [],
-    }
+    };
   },
-  computed: mapState(['user']),
+  computed: mapState(["user"]),
   validations: {
     firstname: { required },
     lastname: { required },
@@ -162,97 +162,97 @@ export default {
   methods: {
     async saveUserForm() {
       try {
-        var params = {}
-        params.authorizer = store.state.user.uid
-        params.firstname = this.firstname
-        params.lastname = this.lastname
+        var params = {};
+        params.authorizer = store.state.user.uid;
+        params.firstname = this.firstname;
+        params.lastname = this.lastname;
         // format scope
-        var length = this.scope.length
-        var scope_formatted = ''
-        var temp = ''
+        var length = this.scope.length;
+        var scope_formatted = "";
+        var temp = "";
         for (var i = 0; i < length; i++) {
-          temp = scope_formatted + this.scope[i].code
-          scope_formatted = temp
+          temp = scope_formatted + this.scope[i].code;
+          scope_formatted = temp;
         }
-        temp = scope_formatted.replace(/\|\|/g, '|')
-        params.scope = temp
+        temp = scope_formatted.replace(/\|\|/g, "|");
+        params.scope = temp;
         // format language
-        length = this.languages.length
-        var languages_formatted = ''
-        temp = ''
+        length = this.languages.length;
+        var languages_formatted = "";
+        temp = "";
         for (i = 0; i < length; i++) {
-          temp = languages_formatted + this.languages[i].code
-          languages_formatted = temp
+          temp = languages_formatted + this.languages[i].code;
+          languages_formatted = temp;
         }
-        temp = languages_formatted.replace(/\|\|/g, '|')
-        params.languages = temp
+        temp = languages_formatted.replace(/\|\|/g, "|");
+        params.languages = temp;
         // remaining values
-        params.start_page = this.start_page
-        params.username = this.username
-        params.password = this.password
+        params.start_page = this.start_page;
+        params.username = this.username;
+        params.password = this.password;
 
-        LogService.consoleLogMessage('params from SaveForm')
-        LogService.consoleLogMessage(params)
-        var res = null
-        res = await AuthorService.registerUser(params)
-        LogService.consoleLogMessage('res from Author Service')
-        LogService.consoleLogMessage(res)
+        LogService.consoleLogMessage("params from SaveForm");
+        LogService.consoleLogMessage(params);
+        var res = null;
+        res = await AuthorService.registerUser(params);
+        LogService.consoleLogMessage("res from Author Service");
+        LogService.consoleLogMessage(res);
         if (res.data.error) {
-          this.registered = false
-          this.error_message = res.data.message
+          this.registered = false;
+          this.error_message = res.data.message;
         } else {
-          location.reload(true)
+          location.reload(true);
         }
       } catch (error) {
-        LogService.consoleLogError('Register There was an error ', error) //
+        LogService.consoleLogError("Register There was an error ", error); //
       }
     },
     startPageOptions() {
       if (!this.$v.start_page.$model) {
-        this.$v.start_page.$model = this.default_start_page
+        this.$v.start_page.$model = this.default_start_page;
       }
     },
     async languageOptions() {
       var options = [
-        { display: 'Global', code: '|*|' },
-        { display: 'English', code: '|eng|' },
-        { display: 'French', code: '|fra|' },
-        { display: 'Simplifed Chinese', computed: '|cmn|' },
-      ]
-      this.language_options = options
-      return
+        { display: "Global", code: "|*|" },
+        { display: "English", code: "|eng|" },
+        { display: "French", code: "|fra|" },
+        { display: "Simplifed Chinese", computed: "|cmn|" },
+      ];
+      this.language_options = options;
+      return;
     },
     async scopeOptions() {
-      await this.getCountries()
-      var options = []
-      var option = {}
-      LogService.consoleLogMessage(this.countries)
-      var length = this.countries.length
+      await this.getCountries();
+      var options = [];
+      var option = {};
+      LogService.consoleLogMessage(this.countries);
+      var length = this.countries.length;
       for (var i = 0; i < length; i++) {
-        option = {}
+        option = {};
         if (this.countries[i].english) {
-          option.display = this.countries[i].english
+          option.display = this.countries[i].english;
         } else {
-          option.display = this.countries[i].name
+          option.display = this.countries[i].name;
         }
-        option.code = '|' + this.countries[i].code + '|'
-        options.push(option)
+        option.code = "|" + this.countries[i].code + "|";
+        options.push(option);
       }
-      option = {}
-      option.display = 'Global'
-      option.code = '*'
-      options.push(option)
-      LogService.consoleLogMessage(options)
-      this.scope_options = options
-      return
+      option = {};
+      option.display = "Global";
+      option.code = "*";
+      options.push(option);
+      LogService.consoleLogMessage(options);
+      this.scope_options = options;
+      return;
     },
   },
   async created() {
     //this.authorized = this.authorize('register', 'global')
-    this.authorized = this.authorize('register', this.$route.params)
-    await this.scopeOptions()
-    await this.languageOptions()
-    this.startPageOptions()
+    this.authorized = this.authorize("register", this.$route.params);
+    await this.scopeOptions();
+    await this.languageOptions();
+    this.startPageOptions();
   },
-}
+};
 </script>
