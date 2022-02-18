@@ -109,135 +109,135 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AuthorService from '@/services/AuthorService.js'
-import LogService from '@/services/LogService.js'
-import NavBar from '@/components/NavBarAdmin.vue'
-import vSelect from 'vue-select'
-import { authorizeMixin } from '@/mixins/AuthorizeMixin.js'
-import { userMixin } from '@/mixins/UserMixin.js'
-import { countriesMixin } from '@/mixins/CountriesMixin.js'
-import { languageMixin } from '@/mixins/LanguageMixin.js'
-import store from '@/store/store.js'
+import { mapState } from "vuex";
+import AuthorService from "@/services/AuthorService.js";
+import LogService from "@/services/LogService.js";
+import NavBar from "@/components/NavBarAdmin.vue";
+import vSelect from "vue-select";
+import { authorizeMixin } from "@/mixins/AuthorizeMixin.js";
+import { userMixin } from "@/mixins/UserMixin.js";
+import { countriesMixin } from "@/mixins/CountriesMixin.js";
+import { languageMixin } from "@/mixins/LanguageMixin.js";
+import store from "@/store/store.js";
 
 export default {
   components: {
     NavBar,
-    'v-select': vSelect,
+    "v-select": vSelect,
   },
-  props: ['uid'],
+  props: ["uid"],
   mixins: [authorizeMixin, countriesMixin, languageMixin, userMixin],
   data() {
     return {
       submitted: false,
       wrong: null,
       registered: true,
-    }
+    };
   },
-  computed: mapState(['user']),
+  computed: mapState(["user"]),
   methods: {
     formatCountryArray() {
-      var length = this.$v.member.scope_countries.$model.length
-      var countries_formatted = ''
-      var temp = ''
+      var length = this.$v.member.scope_countries.$model.length;
+      var countries_formatted = "";
+      var temp = "";
       for (var i = 0; i < length; i++) {
         temp =
-          countries_formatted + this.$v.member.scope_countries.$model[i].code
-        countries_formatted = temp
+          countries_formatted + this.$v.member.scope_countries.$model[i].code;
+        countries_formatted = temp;
       }
-      temp = countries_formatted.replace(/\|\|/g, '|')
-      return temp
+      temp = countries_formatted.replace(/\|\|/g, "|");
+      return temp;
     },
     formatLanguageArray() {
-      var length = this.$v.member.scope_languages.$model.length
-      var formatted = ''
-      var temp = ''
+      var length = this.$v.member.scope_languages.$model.length;
+      var formatted = "";
+      var temp = "";
       for (var i = 0; i < length; i++) {
-        temp = formatted + this.$v.member.scope_languages.$model[i].code
-        formatted = temp
+        temp = formatted + this.$v.member.scope_languages.$model[i].code;
+        formatted = temp;
       }
-      temp = formatted.replace(/\|\|/g, '|')
-      return temp
+      temp = formatted.replace(/\|\|/g, "|");
+      return temp;
     },
     async saveForm() {
       try {
-        var params = this.member
-        LogService.consoleLogMessage('Save Form')
-        LogService.consoleLogMessage(this.member)
-        LogService.consoleLogMessage(this.$v.member.scope_countries.$model)
+        var params = this.member;
+        LogService.consoleLogMessage("Save Form");
+        LogService.consoleLogMessage(this.member);
+        LogService.consoleLogMessage(this.$v.member.scope_countries.$model);
         // for some strange reason it shows up as an array sometimes and other times as a string
         if (Array.isArray(this.$v.member.scope_countries.$model)) {
-          params.scope_countries = this.formatCountryArray()
+          params.scope_countries = this.formatCountryArray();
         } else {
-          params.scope_countries = this.$v.member.scope_countries.$model
+          params.scope_countries = this.$v.member.scope_countries.$model;
         }
         if (Array.isArray(this.$v.member.scope_languages.$model)) {
-          params.scope_languages = this.formatLanguageArray()
+          params.scope_languages = this.formatLanguageArray();
         } else {
-          params.scope_languages = this.$v.member.scope_languages.$model
+          params.scope_languages = this.$v.member.scope_languages.$model;
         }
-        params.start_page = this.$v.member.start_page.$model
-        params.member_uid = this.member.uid
-        params.authorizer = store.state.user.uid
-        LogService.consoleLogMessage('params for SaveForm')
-        LogService.consoleLogMessage(params)
-        let res = null
-        res = await AuthorService.updateUser(params)
-        LogService.consoleLogMessage('res from Author Service')
-        LogService.consoleLogMessage(res)
+        params.start_page = this.$v.member.start_page.$model;
+        params.member_uid = this.member.uid;
+        params.authorizer = store.state.user.uid;
+        LogService.consoleLogMessage("params for SaveForm");
+        LogService.consoleLogMessage(params);
+        let res = null;
+        res = await AuthorService.updateUser(params);
+        LogService.consoleLogMessage("res from Author Service");
+        LogService.consoleLogMessage(res);
         if (res.data.error) {
-          this.registered = false
-          this.error_message = res.data.message
+          this.registered = false;
+          this.error_message = res.data.message;
         } else {
-          this.registered = true
+          this.registered = true;
           this.$router.push({
-            name: 'farm',
-          })
+            name: "farm",
+          });
         }
       } catch (error) {
-        LogService.consoleLogError('Update There was an error ', error)
+        LogService.consoleLogError("Update There was an error ", error);
       }
     },
     async deleteForm() {
       try {
-        var params = {}
-        params.authorizer = store.state.user.uid
-        params.member_uid = this.member.uid
-        params.member_username = this.member.username
-        LogService.consoleLogMessage('params from DeleteForm')
-        LogService.consoleLogMessage(params)
-        let res = await AuthorService.deleteUser(params)
-        LogService.consoleLogMessage('res from Author Service')
-        LogService.consoleLogMessage(res)
+        var params = {};
+        params.authorizer = store.state.user.uid;
+        params.member_uid = this.member.uid;
+        params.member_username = this.member.username;
+        LogService.consoleLogMessage("params from DeleteForm");
+        LogService.consoleLogMessage(params);
+        let res = await AuthorService.deleteUser(params);
+        LogService.consoleLogMessage("res from Author Service");
+        LogService.consoleLogMessage(res);
         if (res.data.error) {
-          this.registered = false
-          this.error_message = res.data.message
+          this.registered = false;
+          this.error_message = res.data.message;
         } else {
-          this.registered = true
+          this.registered = true;
           this.$router.push({
-            name: 'farm',
-          })
+            name: "farm",
+          });
         }
       } catch (error) {
-        LogService.consoleLogError('Delete There was an error ', error)
+        LogService.consoleLogError("Delete There was an error ", error);
       }
     },
   },
   async created() {
-    this.authorized = this.authorize('register', this.$route.params)
+    this.authorized = this.authorize("register", this.$route.params);
     if (this.authorized) {
       try {
-        var params = {}
-        params.uid = this.$route.params.uid
-        this.member = await AuthorService.getUser(params)
-        await this.countryOptions()
-        await this.languageOptions()
-        this.member.password = null
-        LogService.consoleLogMessage(this.member)
+        var params = {};
+        params.uid = this.$route.params.uid;
+        this.member = await AuthorService.getUser(params);
+        await this.countryOptions();
+        await this.languageOptions();
+        this.member.password = null;
+        LogService.consoleLogMessage(this.member);
       } catch (error) {
-        LogService.consoleLogError('There was an error in User.vue:', error)
+        LogService.consoleLogError("There was an error in User.vue:", error);
       }
     }
   },
-}
+};
 </script>

@@ -1,5 +1,5 @@
-import BibleService from '@/services/BibleService.js'
-import LogService from '@/services/LogService.js'
+import BibleService from "@/services/BibleService.js";
+import LogService from "@/services/LogService.js";
 export const bibleMixin = {
   methods: {
     /* expects  var params = {
@@ -9,22 +9,22 @@ export const bibleMixin = {
     */
     async getBibleVersions(params) {
       try {
-        var versions = []
+        var versions = [];
         if (params.language_iso.length > 2) {
-          var response = await BibleService.getBibleVersions(params)
+          var response = await BibleService.getBibleVersions(params);
           if (response !== false) {
-            versions = response
+            versions = response;
           }
-          return versions
+          return versions;
         }
       } catch (error) {
         LogService.consoleLogError(
-          'BIBLE MIXIN -- There was an error finding Bible Versions:',
+          "BIBLE MIXIN -- There was an error finding Bible Versions:",
           error
-        )
-        this.error = error.toString() + 'BIBLE MIXIN -- getBibleVersions'
-        return null
+        );
+        this.error = error.toString() + "BIBLE MIXIN -- getBibleVersions";
+        return null;
       }
     },
   },
-}
+};

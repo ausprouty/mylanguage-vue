@@ -1,25 +1,25 @@
-import AuthorService from '@/services/AuthorService.js'
+import AuthorService from "@/services/AuthorService.js";
 
 export default {
   async bibleLinkMaker(params) {
-    params.page = 'bibleLinkMaker'
-    params.action = 'bibleLinkMaker'
-    console.log(params)
-    var res = await AuthorService.aReturnContent(params)
-    return res
+    params.page = "bibleLinkMaker";
+    params.action = "bibleLinkMaker";
+    console.log(params);
+    var res = await AuthorService.aReturnContent(params);
+    return res;
   },
   async biblePopupMaker(params) {
-    params.page = 'biblePopupMaker'
-    params.action = 'biblePopupMaker'
-    console.log(params)
-    var res = await AuthorService.aReturnContent(params)
-    return res
+    params.page = "biblePopupMaker";
+    params.action = "biblePopupMaker";
+    console.log(params);
+    var res = await AuthorService.aReturnContent(params);
+    return res;
   },
   async getBibleVersions(params) {
-    params.page = 'bibleVersions'
-    params.action = 'getBibleVersions'
-    var res = await AuthorService.aReturnContent(params)
-    return res
+    params.page = "bibleVersions";
+    params.action = "getBibleVersions";
+    var res = await AuthorService.aReturnContent(params);
+    return res;
   },
 
   async getDbtArray(params) {
@@ -36,11 +36,11 @@ export default {
       'collection_code' => 'OT' ,
      );
   */
-    params.page = 'bibleDbtArray'
-    params.action = 'createBibleDbtArrayFromPassage'
-    var res = await AuthorService.aReturnContent(params)
-    console.log(res)
-    return res
+    params.page = "bibleDbtArray";
+    params.action = "createBibleDbtArrayFromPassage";
+    var res = await AuthorService.aReturnContent(params);
+    console.log(res);
+    return res;
   },
 
   async getBiblePassage(params) {
@@ -68,8 +68,8 @@ export default {
       		"link": "https:\/\/biblegateway.com\/passage\/?search=Nehemiah%201:1-11&version=NIV"
 		}
   */
-    params.page = 'bibleGetPassage'
-    params.action = 'bibleGetPassage'
-    return await AuthorService.aReturnContent(params)
+    params.page = "bibleGetPassage";
+    params.action = "bibleGetPassage";
+    return await AuthorService.aReturnContent(params);
   },
-}
+};
